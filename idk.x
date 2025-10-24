@@ -1,3 +1,0 @@
-%%hook ClassName
-
-%end

@@ -16,11 +16,7 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
-// Include the `app`, `utils`, and `logos-intellij-plugin` subprojects in the build.
-// If there are changes in only one of the projects, Gradle will rebuild only the one that has changed.
-// Learn more about structuring projects with Gradle - https://docs.gradle.org/8.7/userguide/multi_project_builds.html
-include(":app")
-include(":utils")
+// Single IntelliJ plugin module with JFlex-based lexer
 include(":logos-intellij-plugin")
 
 rootProject.name = "logosLanguageSupport"

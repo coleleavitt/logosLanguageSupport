@@ -1,7 +1,8 @@
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm")
+    kotlin("jvm") version "2.2.20"
     id("org.jetbrains.intellij.platform") version "2.1.0"
+    id("org.jetbrains.grammarkit") version "2022.3.2.2"
 }
 
 group = "com.coleleavitt.logos"
@@ -21,12 +22,8 @@ repositories {
 dependencies {
     intellijPlatform {
         rustRover("2024.3")
-
         instrumentationTools()
     }
-
-    // Include our LSP server components
-    implementation(project(":app"))
 }
 
 kotlin {
@@ -92,17 +89,22 @@ tasks {
         untilBuild.set("253.*")
     }
 
-    // Build the language server before building the plugin
-    prepareSandbox {
-        dependsOn(":app:installDist")
+    // Configure the lexer generation task
+    withType<org.jetbrains.grammarkit.tasks.GenerateLexerTask> {
+        sourceFile.set(file("src/main/grammer/Logos.flex"))
+        targetOutputDir.set(file("src/main/gen/com/coleleavitt/logos/intellij"))
+        purgeOldFiles.set(true)
+    }
 
-        // Copy the language server distribution into the plugin directory
-        // Note: files added via from() go into pluginName directory automatically
-        val appProject = project(":app")
-        val installDirProvider = appProject.layout.buildDirectory.dir("install/app")
+    // Make compileKotlin depend on lexer generation
+    compileKotlin {
+        dependsOn("generateLexer")
+    }
+}
 
-        from(installDirProvider) {
-            into(pluginName.map { "$it/languageServer" })
-        }
+// Add generated sources to source sets
+sourceSets {
+    main {
+        java.srcDirs("src/main/gen")
     }
 }

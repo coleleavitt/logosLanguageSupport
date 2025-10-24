@@ -71,15 +71,23 @@ class LogosCompletionProvider : CompletionProvider<CompletionParameters>() {
             return LookupElementBuilder.create(label)
                 .withInsertHandler { context, _ ->
                     val document = context.document
-                    val startOffset = context.startOffset
+                    var startOffset = context.startOffset
                     val tailOffset = context.tailOffset
+
+                    // Check if there's a '%' before the completion that triggered it
+                    if (startOffset > 0 && document.charsSequence[startOffset - 1] == '%') {
+                        startOffset--  // Include the '%' in the replacement
+                    }
 
                     // Replace with insertion text
                     document.deleteString(startOffset, tailOffset)
                     document.insertString(startOffset, insertText)
 
-                    // Move cursor to first placeholder
-                    context.editor.caretModel.moveToOffset(startOffset + insertText.indexOf("\${1"))
+                    // Move cursor to first placeholder if it exists
+                    val placeholderIndex = insertText.indexOf("\${1")
+                    if (placeholderIndex >= 0) {
+                        context.editor.caretModel.moveToOffset(startOffset + placeholderIndex)
+                    }
                 }
                 .withTypeText("Logos directive")
                 .withBoldness(true)

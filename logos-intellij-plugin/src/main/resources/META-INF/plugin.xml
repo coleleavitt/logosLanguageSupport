@@ -43,7 +43,6 @@
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.lang</depends>
-    <depends>com.intellij.modules.lsp</depends>
     <depends optional="true" config-file="logos-objc.xml">com.intellij.modules.cidr.lang</depends>
 
     <!-- Extension points defined by the plugin.
@@ -112,9 +111,6 @@
 
         <!-- Run Configuration -->
         <configurationType implementation="com.coleleavitt.logos.intellij.LogosRunConfigurationType"/>
-
-        <!-- Native LSP Support -->
-        <platform.lsp.serverSupportProvider implementation="com.coleleavitt.logos.intellij.lsp.LogosLspServerSupportProvider"/>
     </extensions>
 
     <actions>

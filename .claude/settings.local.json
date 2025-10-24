@@ -42,7 +42,8 @@
       "WebFetch(domain:blog.jetbrains.com)",
       "Bash(rg:*)",
       "Bash(find:*)",
-      "Bash(xargs cat:*)"
+      "Bash(xargs cat:*)",
+      "Bash(tree:*)"
     ],
     "deny": [],
     "ask": []

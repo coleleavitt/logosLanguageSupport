@@ -28,6 +28,7 @@ class LogosSyntaxHighlighter : SyntaxHighlighterBase() {
 
             tokenType == LogosElementTypes.DIRECTIVE_NEW ||
             tokenType == LogosElementTypes.DIRECTIVE_ORIG ||
+            tokenType == LogosElementTypes.DIRECTIVE_ORIG_PTR ||
             tokenType == LogosElementTypes.DIRECTIVE_LOG ||
             tokenType == LogosElementTypes.DIRECTIVE_INIT -> {
                 arrayOf(LOGOS_SPECIAL)
@@ -50,6 +51,31 @@ class LogosSyntaxHighlighter : SyntaxHighlighterBase() {
 
             tokenType == LogosElementTypes.OBJ_C_METHOD_SCOPE -> {
                 arrayOf(OBJC_METHOD_SCOPE)
+            }
+
+            // Objective-C Support
+            tokenType == LogosElementTypes.OBJ_C_STRING -> {
+                arrayOf(DefaultLanguageHighlighterColors.STRING)
+            }
+
+            tokenType == LogosElementTypes.OBJ_C_AT_KEYWORD -> {
+                arrayOf(OBJC_AT_KEYWORD)
+            }
+
+            tokenType == LogosElementTypes.OBJ_C_KEYWORD -> {
+                arrayOf(OBJC_KEYWORD)
+            }
+
+            tokenType == LogosElementTypes.TYPE_KEYWORD -> {
+                arrayOf(DefaultLanguageHighlighterColors.KEYWORD)
+            }
+
+            tokenType == LogosElementTypes.C_KEYWORD -> {
+                arrayOf(DefaultLanguageHighlighterColors.KEYWORD)
+            }
+
+            tokenType == LogosElementTypes.LITERAL -> {
+                arrayOf(DefaultLanguageHighlighterColors.CONSTANT)
             }
 
             tokenType == LogosElementTypes.IDENTIFIER -> {
@@ -125,6 +151,16 @@ class LogosSyntaxHighlighter : SyntaxHighlighterBase() {
             "OBJC_METHOD_SCOPE",
             DefaultLanguageHighlighterColors.OPERATION_SIGN
         )
+
+        val OBJC_AT_KEYWORD = TextAttributesKey.createTextAttributesKey(
+            "OBJC_AT_KEYWORD",
+            DefaultLanguageHighlighterColors.KEYWORD
+        )
+
+        val OBJC_KEYWORD = TextAttributesKey.createTextAttributesKey(
+            "OBJC_KEYWORD",
+            DefaultLanguageHighlighterColors.KEYWORD
+        )
     }
 }
 
@@ -142,6 +178,7 @@ object LogosElementTypes {
     @JvmField val DIRECTIVE_GROUP = IElementType("DIRECTIVE_GROUP", LogosLanguage.INSTANCE)
     @JvmField val DIRECTIVE_NEW = IElementType("DIRECTIVE_NEW", LogosLanguage.INSTANCE)
     @JvmField val DIRECTIVE_ORIG = IElementType("DIRECTIVE_ORIG", LogosLanguage.INSTANCE)
+    @JvmField val DIRECTIVE_ORIG_PTR = IElementType("DIRECTIVE_ORIG_PTR", LogosLanguage.INSTANCE)
     @JvmField val DIRECTIVE_LOG = IElementType("DIRECTIVE_LOG", LogosLanguage.INSTANCE)
     @JvmField val DIRECTIVE_CTOR = IElementType("DIRECTIVE_CTOR", LogosLanguage.INSTANCE)
     @JvmField val DIRECTIVE_DTOR = IElementType("DIRECTIVE_DTOR", LogosLanguage.INSTANCE)
@@ -153,6 +190,15 @@ object LogosElementTypes {
     @JvmField val DIRECTIVE_C = IElementType("DIRECTIVE_C", LogosLanguage.INSTANCE)
 
     @JvmField val OBJ_C_METHOD_SCOPE = IElementType("OBJ_C_METHOD_SCOPE", LogosLanguage.INSTANCE)
+
+    // Objective-C Support
+    @JvmField val OBJ_C_STRING = IElementType("OBJ_C_STRING", LogosLanguage.INSTANCE)
+    @JvmField val OBJ_C_AT_KEYWORD = IElementType("OBJ_C_AT_KEYWORD", LogosLanguage.INSTANCE)
+    @JvmField val OBJ_C_KEYWORD = IElementType("OBJ_C_KEYWORD", LogosLanguage.INSTANCE)
+    @JvmField val TYPE_KEYWORD = IElementType("TYPE_KEYWORD", LogosLanguage.INSTANCE)
+    @JvmField val C_KEYWORD = IElementType("C_KEYWORD", LogosLanguage.INSTANCE)
+    @JvmField val LITERAL = IElementType("LITERAL", LogosLanguage.INSTANCE)
+
     @JvmField val IDENTIFIER = IElementType("IDENTIFIER", LogosLanguage.INSTANCE)
     @JvmField val STRING = IElementType("STRING", LogosLanguage.INSTANCE)
     @JvmField val NUMBER = IElementType("NUMBER", LogosLanguage.INSTANCE)

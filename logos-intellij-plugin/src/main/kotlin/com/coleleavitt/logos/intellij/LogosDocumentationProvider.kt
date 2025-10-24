@@ -24,6 +24,7 @@ class LogosDocumentationProvider : AbstractDocumentationProvider() {
             LogosElementTypes.DIRECTIVE_SUBCLASS -> generateSubclassDoc()
             LogosElementTypes.DIRECTIVE_NEW -> generateNewDoc()
             LogosElementTypes.DIRECTIVE_ORIG -> generateOrigDoc()
+            LogosElementTypes.DIRECTIVE_ORIG_PTR -> generateOrigPtrDoc()
             LogosElementTypes.DIRECTIVE_LOG -> generateLogDoc()
             LogosElementTypes.DIRECTIVE_INIT -> generateInitDoc()
             LogosElementTypes.DIRECTIVE_CTOR -> generateCtorDoc()
@@ -88,6 +89,23 @@ class LogosDocumentationProvider : AbstractDocumentationProvider() {
     %orig; // Calls original
     // Additional code
 }</pre>
+        <h3>With custom arguments:</h3>
+        <pre>- (NSString *)description {
+    return [%orig stringByAppendingString:@" (modified)"];
+}</pre>
+    """.trimIndent()
+
+    private fun generateOrigPtrDoc() = """
+        <h2>&%orig</h2>
+        <p>Get a pointer to the original method implementation (IMP).</p>
+        <h3>Usage:</h3>
+        <pre>- (void)method {
+    IMP originalIMP = &%orig;
+    // Store or call later
+    ((void(*)(id, SEL))originalIMP)(self, _cmd);
+}</pre>
+        <h3>Use case:</h3>
+        <p>Advanced hooking patterns where you need to store the function pointer for later use.</p>
     """.trimIndent()
 
     private fun generateLogDoc() = """

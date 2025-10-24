@@ -27,11 +27,10 @@ class LogosBraceMatcher : PairedBraceMatcher {
         return openingBraceOffset
     }
 
-    companion object {
-        private val PAIRS = arrayOf(
-            BracePair(LogosElementTypes.LBRACE, LogosElementTypes.RBRACE, true),
-            BracePair(LogosElementTypes.LPAREN, LogosElementTypes.RPAREN, false),
-            BracePair(LogosElementTypes.LANGLE, LogosElementTypes.RANGLE, false)
-        )
-    }
 }
+
+private val PAIRS = arrayOf(
+    BracePair(LogosElementTypes.LBRACE, LogosElementTypes.RBRACE, true),
+    BracePair(LogosElementTypes.LPAREN, LogosElementTypes.RPAREN, false),
+    BracePair(LogosElementTypes.LANGLE, LogosElementTypes.RANGLE, false)
+)

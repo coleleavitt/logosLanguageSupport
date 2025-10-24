@@ -31,7 +31,8 @@ class LogosStructureViewFactory : PsiStructureViewFactory {
 /**
  * Structure view model for Logos files.
  */
-class LogosStructureViewModel(psiFile: PsiFile) : com.intellij.ide.structureView.TextEditorBasedStructureViewModel(psiFile) {
+class LogosStructureViewModel(psiFile: PsiFile) :
+    com.intellij.ide.structureView.TextEditorBasedStructureViewModel(psiFile) {
 
     override fun getPsiFile(): PsiFile {
         return super.getPsiFile()
@@ -45,7 +46,8 @@ class LogosStructureViewModel(psiFile: PsiFile) : com.intellij.ide.structureView
 /**
  * Structure view element for Logos PSI elements.
  */
-class LogosStructureViewElement(private val element: PsiElement) : com.intellij.ide.structureView.StructureViewTreeElement {
+class LogosStructureViewElement(private val element: PsiElement) :
+    com.intellij.ide.structureView.StructureViewTreeElement {
 
     override fun getValue(): Any {
         return element
@@ -68,7 +70,35 @@ class LogosStructureViewElement(private val element: PsiElement) : com.intellij.
     override fun getPresentation(): com.intellij.navigation.ItemPresentation {
         return object : com.intellij.navigation.ItemPresentation {
             override fun getPresentableText(): String? {
-                return element.text?.take(50)
+                if (element !is LogosPsiElement) {
+                    return element.containingFile?.name ?: "Logos File"
+                }
+
+                val elementType = element.node.elementType
+                val text = element.text
+
+                return when (elementType) {
+                    LogosElementTypes.DIRECTIVE_HOOK -> {
+                        // Extract class name after %hook
+                        text.substringAfter("%hook").trim().takeWhile { it.isLetterOrDigit() || it == '_' || it == '$' }
+                            .let { if (it.isNotEmpty()) "%hook $it" else text.take(50) }
+                    }
+                    LogosElementTypes.DIRECTIVE_SUBCLASS -> {
+                        // Extract class name after %subclass
+                        text.substringAfter("%subclass").trim().takeWhile { it.isLetterOrDigit() || it == '_' || it == ':' || it.isWhitespace() }
+                            .let { if (it.isNotEmpty()) "%subclass $it" else text.take(50) }
+                    }
+                    LogosElementTypes.DIRECTIVE_GROUP -> {
+                        // Extract group name after %group
+                        text.substringAfter("%group").trim().takeWhile { it.isLetterOrDigit() || it == '_' }
+                            .let { if (it.isNotEmpty()) "%group $it" else text.take(50) }
+                    }
+                    LogosElementTypes.OBJ_C_METHOD_SCOPE -> {
+                        // This is a method signature, get the full line
+                        text.take(100).replace("\n", " ").trim()
+                    }
+                    else -> text.take(50)
+                }
             }
 
             override fun getLocationString(): String? {
@@ -76,13 +106,43 @@ class LogosStructureViewElement(private val element: PsiElement) : com.intellij.
             }
 
             override fun getIcon(unused: Boolean): javax.swing.Icon? {
-                return LogosIcons.FILE
+                if (element !is LogosPsiElement) {
+                    return LogosIcons.FILE
+                }
+
+                return when (element.node.elementType) {
+                    LogosElementTypes.DIRECTIVE_HOOK -> com.intellij.icons.AllIcons.Nodes.Class
+                    LogosElementTypes.DIRECTIVE_SUBCLASS -> com.intellij.icons.AllIcons.Nodes.AbstractClass
+                    LogosElementTypes.DIRECTIVE_GROUP -> com.intellij.icons.AllIcons.Nodes.Package
+                    LogosElementTypes.OBJ_C_METHOD_SCOPE -> com.intellij.icons.AllIcons.Nodes.Method
+                    else -> LogosIcons.FILE
+                }
             }
         }
     }
 
     override fun getChildren(): Array<com.intellij.ide.util.treeView.smartTree.TreeElement> {
-        // TODO: Implement proper tree structure for hooks/subclasses/methods
-        return emptyArray()
+        val children = mutableListOf<com.intellij.ide.util.treeView.smartTree.TreeElement>()
+
+        // Collect all child elements
+        var child: PsiElement? = element.firstChild
+        while (child != null) {
+            if (child is LogosPsiElement) {
+                val childType = child.node.elementType
+
+                // Add structural elements to the tree
+                when (childType) {
+                    LogosElementTypes.DIRECTIVE_HOOK,
+                    LogosElementTypes.DIRECTIVE_SUBCLASS,
+                    LogosElementTypes.DIRECTIVE_GROUP,
+                    LogosElementTypes.OBJ_C_METHOD_SCOPE -> {
+                        children.add(LogosStructureViewElement(child))
+                    }
+                }
+            }
+            child = child.nextSibling
+        }
+
+        return children.toTypedArray()
     }
 }

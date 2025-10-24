@@ -27,7 +27,7 @@ class LogosColorSettingsPage : ColorSettingsPage {
         return "Logos"
     }
 
-    override fun getIcon(): Icon? {
+    override fun getIcon(): Icon {
         return LogosIcons.FILE
     }
 
@@ -96,14 +96,13 @@ class LogosColorSettingsPage : ColorSettingsPage {
         return null
     }
 
-    companion object {
-        private val DESCRIPTORS = arrayOf(
-            AttributesDescriptor("Directive (Block)", LogosSyntaxHighlighter.LOGOS_DIRECTIVE),
-            AttributesDescriptor("Directive (Special)", LogosSyntaxHighlighter.LOGOS_SPECIAL),
-            AttributesDescriptor("Directive (Lifecycle)", LogosSyntaxHighlighter.LOGOS_LIFECYCLE),
-            AttributesDescriptor("Directive (Advanced)", LogosSyntaxHighlighter.LOGOS_ADVANCED),
-            AttributesDescriptor("Runtime Function", LogosSyntaxHighlighter.LOGOS_RUNTIME),
-            AttributesDescriptor("Method Scope", LogosSyntaxHighlighter.OBJC_METHOD_SCOPE)
-        )
-    }
 }
+
+private val DESCRIPTORS = arrayOf(
+    AttributesDescriptor("Directive (Block)", LogosSyntaxHighlighter.LOGOS_DIRECTIVE),
+    AttributesDescriptor("Directive (Special)", LogosSyntaxHighlighter.LOGOS_SPECIAL),
+    AttributesDescriptor("Directive (Lifecycle)", LogosSyntaxHighlighter.LOGOS_LIFECYCLE),
+    AttributesDescriptor("Directive (Advanced)", LogosSyntaxHighlighter.LOGOS_ADVANCED),
+    AttributesDescriptor("Runtime Function", LogosSyntaxHighlighter.LOGOS_RUNTIME),
+    AttributesDescriptor("Method Scope", LogosSyntaxHighlighter.OBJC_METHOD_SCOPE)
+)

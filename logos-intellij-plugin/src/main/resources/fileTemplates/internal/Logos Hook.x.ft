@@ -1,0 +1,9 @@
+%hook ${CLASS_NAME}
+
+- (${RETURN_TYPE})${METHOD_NAME}:(${ARG_TYPE})${ARG_NAME} {
+    ${RETURN_TYPE} result = %orig;
+    // Custom code here
+    return result;
+}
+
+%end

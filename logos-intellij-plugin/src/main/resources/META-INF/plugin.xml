@@ -1,0 +1,160 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <id>com.coleleavitt.logos</id>
+    <name>Logos Language Support</name>
+    <vendor email="cole@example.com" url="https://github.com/coleleavitt/logosLanguageSupport">Cole Leavitt</vendor>
+
+    <description><![CDATA[
+    <p>
+      Comprehensive language support for <strong>Logos</strong> (.x, .xm, .xi, .xmi files)
+      used in <strong>Theos</strong> tweak development for iOS and macOS.
+    </p>
+
+    <h3>Features</h3>
+    <ul>
+      <li><strong>Syntax Highlighting</strong>: Rich highlighting for Logos directives, Objective-C keywords, and more</li>
+      <li><strong>Code Completion</strong>: Autocomplete for Logos directives (%hook, %subclass, %orig, etc.)</li>
+      <li><strong>Hover Documentation</strong>: Detailed docs for all directives with examples</li>
+      <li><strong>Diagnostics</strong>: Real-time error checking and warnings</li>
+      <li><strong>Go to Definition</strong>: Navigate to class and method declarations</li>
+      <li><strong>Find References</strong>: Locate all usages of symbols</li>
+      <li><strong>Document Outline</strong>: Structure view of hooks and subclasses</li>
+      <li><strong>File Templates</strong>: Quick-start templates for common patterns</li>
+    </ul>
+
+    <h3>Supported Directives</h3>
+    <p>
+      %hook, %subclass, %group, %new, %orig, %log, %init, %ctor, %dtor,
+      %property, %hookf, %c, %config, %end
+    </p>
+
+    <h3>About Logos</h3>
+    <p>
+      Logos is a Perl regex-based preprocessor that transforms elegant hooking syntax
+      into low-level Objective-C runtime code for method swizzling.
+    </p>
+
+    <p>
+      Part of the <a href="https://theos.dev">Theos</a> build system for iOS/macOS tweak development.
+    </p>
+  ]]></description>
+
+    <!-- Product and plugin compatibility requirements.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.modules.lsp</depends>
+    <depends optional="true" config-file="logos-objc.xml">com.intellij.modules.cidr.lang</depends>
+
+    <!-- Extension points defined by the plugin.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- File Type -->
+        <fileType name="Logos"
+                  implementationClass="com.coleleavitt.logos.intellij.LogosFileType"
+                  fieldName="INSTANCE"
+                  language="Logos"
+                  extensions="x;xm;xi;xmi"/>
+
+        <!-- Language Definition -->
+        <lang.parserDefinition language="Logos"
+                               implementationClass="com.coleleavitt.logos.intellij.LogosParserDefinition"/>
+
+        <!-- Syntax Highlighter -->
+        <lang.syntaxHighlighterFactory language="Logos"
+                                       implementationClass="com.coleleavitt.logos.intellij.LogosSyntaxHighlighterFactory"/>
+
+        <!-- Color Settings Page -->
+        <colorSettingsPage implementation="com.coleleavitt.logos.intellij.LogosColorSettingsPage"/>
+
+        <!-- Annotator for semantic highlighting -->
+        <annotator language="Logos"
+                   implementationClass="com.coleleavitt.logos.intellij.LogosAnnotator"/>
+
+        <!-- Brace Matcher -->
+        <lang.braceMatcher language="Logos"
+                           implementationClass="com.coleleavitt.logos.intellij.LogosBraceMatcher"/>
+
+        <!-- Commenter -->
+        <lang.commenter language="Logos"
+                        implementationClass="com.coleleavitt.logos.intellij.LogosCommenter"/>
+
+        <!-- Code Folder -->
+        <lang.foldingBuilder language="Logos"
+                             implementationClass="com.coleleavitt.logos.intellij.LogosFoldingBuilder"/>
+
+        <!-- Structure View -->
+        <lang.psiStructureViewFactory language="Logos"
+                                      implementationClass="com.coleleavitt.logos.intellij.LogosStructureViewFactory"/>
+
+        <!-- Find Usages -->
+        <lang.findUsagesProvider language="Logos"
+                                 implementationClass="com.coleleavitt.logos.intellij.LogosFindUsagesProvider"/>
+
+        <!-- Code Completion -->
+        <completion.contributor language="Logos"
+                                implementationClass="com.coleleavitt.logos.intellij.LogosCompletionContributor"/>
+
+        <!-- Documentation Provider -->
+        <lang.documentationProvider language="Logos"
+                                    implementationClass="com.coleleavitt.logos.intellij.LogosDocumentationProvider"/>
+
+        <!-- Live Templates -->
+        <liveTemplateContext contextId="Logos"
+                             implementation="com.coleleavitt.logos.intellij.LogosTemplateContextType"/>
+
+        <defaultLiveTemplates file="liveTemplates/Logos.xml"/>
+
+        <!-- File Templates -->
+        <internalFileTemplate name="Logos Tweak"/>
+        <internalFileTemplate name="Logos Hook"/>
+        <internalFileTemplate name="Logos Subclass"/>
+
+        <!-- Run Configuration -->
+        <configurationType implementation="com.coleleavitt.logos.intellij.LogosRunConfigurationType"/>
+
+        <!-- Native LSP Support -->
+        <platform.lsp.serverSupportProvider implementation="com.coleleavitt.logos.intellij.lsp.LogosLspServerSupportProvider"/>
+    </extensions>
+
+    <actions>
+        <!-- New File Actions -->
+        <action id="Logos.NewFile"
+                class="com.coleleavitt.logos.intellij.actions.NewLogosFileAction"
+                text="Logos Tweak File"
+                description="Create new Logos tweak file"
+                icon="AllIcons.FileTypes.Custom">
+            <add-to-group group-id="NewGroup" anchor="after" relative-to-action="NewFile"/>
+        </action>
+
+        <!-- Build with Theos -->
+        <action id="Logos.BuildTheos"
+                class="com.coleleavitt.logos.intellij.actions.BuildTheosAction"
+                text="Build with Theos"
+                description="Build the current Theos project"
+                icon="AllIcons.Actions.Compile">
+            <add-to-group group-id="BuildMenu" anchor="first"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt B"/>
+        </action>
+
+        <!-- Deploy to Device -->
+        <action id="Logos.DeployTheos"
+                class="com.coleleavitt.logos.intellij.actions.DeployTheosAction"
+                text="Deploy to Device"
+                description="Build and deploy to device via SSH"
+                icon="AllIcons.Actions.Upload">
+            <add-to-group group-id="BuildMenu" anchor="after" relative-to-action="Logos.BuildTheos"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt D"/>
+        </action>
+    </actions>
+
+    <applicationListeners>
+        <listener class="com.coleleavitt.logos.intellij.LogosApplicationListener"
+                  topic="com.intellij.openapi.application.ApplicationActivationListener"/>
+    </applicationListeners>
+
+    <projectListeners>
+        <listener class="com.coleleavitt.logos.intellij.LogosProjectListener"
+                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
+    </projectListeners>
+</idea-plugin>

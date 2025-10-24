@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templateSet group="Logos">
+    <template name="hook" value="%hook $CLASS$&#10;$METHODS$&#10;%end" description="Create a hook block"
+              toReformat="true" toShortenFQNames="true">
+        <variable name="CLASS" expression="" defaultValue="&quot;ClassName&quot;" alwaysStopAt="true"/>
+        <variable name="METHODS" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="Logos" value="true"/>
+        </context>
+    </template>
+
+    <template name="subclass" value="%subclass $CLASS$ : $PARENT$&#10;$METHODS$&#10;%end"
+              description="Create a subclass block" toReformat="true" toShortenFQNames="true">
+        <variable name="CLASS" expression="" defaultValue="&quot;NewClass&quot;" alwaysStopAt="true"/>
+        <variable name="PARENT" expression="" defaultValue="&quot;NSObject&quot;" alwaysStopAt="true"/>
+        <variable name="METHODS" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="Logos" value="true"/>
+        </context>
+    </template>
+
+    <template name="group" value="%group $NAME$&#10;$CONTENT$&#10;%end" description="Create a group block"
+              toReformat="true" toShortenFQNames="true">
+        <variable name="NAME" expression="" defaultValue="&quot;GroupName&quot;" alwaysStopAt="true"/>
+        <variable name="CONTENT" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="Logos" value="true"/>
+        </context>
+    </template>
+
+    <template name="new" value="%new&#10;- ($RETURN$)$METHOD$ {&#10;    $BODY$&#10;}"
+              description="Add new method" toReformat="true" toShortenFQNames="true">
+        <variable name="RETURN" expression="" defaultValue="&quot;void&quot;" alwaysStopAt="true"/>
+        <variable name="METHOD" expression="" defaultValue="&quot;methodName&quot;" alwaysStopAt="true"/>
+        <variable name="BODY" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="Logos" value="true"/>
+        </context>
+    </template>
+
+    <template name="ctor" value="%ctor {&#10;    %init;&#10;    $BODY$&#10;}" description="Constructor block"
+              toReformat="true" toShortenFQNames="true">
+        <variable name="BODY" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="Logos" value="true"/>
+        </context>
+    </template>
+
+    <template name="dtor" value="%dtor {&#10;    $BODY$&#10;}" description="Destructor block" toReformat="true"
+              toShortenFQNames="true">
+        <variable name="BODY" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="Logos" value="true"/>
+        </context>
+    </template>
+
+    <template name="property" value="%property ($ATTRIBUTES$) $TYPE$ *$NAME$;"
+              description="Add property" toReformat="true" toShortenFQNames="true">
+        <variable name="ATTRIBUTES" expression="" defaultValue="&quot;nonatomic, strong&quot;" alwaysStopAt="true"/>
+        <variable name="TYPE" expression="" defaultValue="&quot;NSString&quot;" alwaysStopAt="true"/>
+        <variable name="NAME" expression="" defaultValue="&quot;propertyName&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="Logos" value="true"/>
+        </context>
+    </template>
+
+    <template name="hookf" value="%hookf($RETURN$, $FUNCTION$, $ARGS$) {&#10;    $BODY$&#10;}"
+              description="Hook C function" toReformat="true" toShortenFQNames="true">
+        <variable name="RETURN" expression="" defaultValue="&quot;void&quot;" alwaysStopAt="true"/>
+        <variable name="FUNCTION" expression="" defaultValue="&quot;functionName&quot;" alwaysStopAt="true"/>
+        <variable name="ARGS" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="BODY" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="Logos" value="true"/>
+        </context>
+    </template>
+
+    <template name="orig" value="%orig;" description="Call original implementation" toReformat="false"
+              toShortenFQNames="false">
+        <context>
+            <option name="Logos" value="true"/>
+        </context>
+    </template>
+
+    <template name="log" value="%log;" description="Log method call" toReformat="false" toShortenFQNames="false">
+        <context>
+            <option name="Logos" value="true"/>
+        </context>
+    </template>
+
+    <template name="init" value="%init;" description="Initialize hooks" toReformat="false" toShortenFQNames="false">
+        <context>
+            <option name="Logos" value="true"/>
+        </context>
+    </template>
+
+    <template name="c" value="%c($CLASS$)" description="Runtime class lookup" toReformat="false"
+              toShortenFQNames="false">
+        <variable name="CLASS" expression="" defaultValue="&quot;ClassName&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="Logos" value="true"/>
+        </context>
+    </template>
+</templateSet>

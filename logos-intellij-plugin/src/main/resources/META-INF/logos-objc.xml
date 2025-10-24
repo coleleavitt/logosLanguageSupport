@@ -1,0 +1,7 @@
+<!-- Optional integration with CLion/AppCode for Objective-C support -->
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Future: Integration with Objective-C language features -->
+        <!-- This file is loaded only when com.intellij.modules.cidr.lang is available -->
+    </extensions>
+</idea-plugin>

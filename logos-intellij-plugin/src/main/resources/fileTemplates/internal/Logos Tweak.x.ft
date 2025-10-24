@@ -1,0 +1,19 @@
+#import <UIKit/UIKit.h>
+
+// ${NAME} - Logos Tweak
+// Author: ${USER}
+// Date: ${DATE}
+
+%hook ${CLASS_NAME}
+
+- (void)${METHOD_NAME} {
+    %orig;
+    NSLog(@"Hooked ${CLASS_NAME}.${METHOD_NAME}");
+}
+
+%end
+
+%ctor {
+    %init;
+    NSLog(@"${NAME} loaded");
+}

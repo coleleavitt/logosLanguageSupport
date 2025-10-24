@@ -1,0 +1,18 @@
+%subclass ${CLASS_NAME} : ${PARENT_CLASS}
+
+%property (nonatomic, strong) NSString *customProperty;
+
+- (instancetype)init {
+    self = %orig;
+    if (self) {
+        self.customProperty = @"Default Value";
+    }
+    return self;
+}
+
+%new
+- (void)customMethod {
+    NSLog(@"Custom method called");
+}
+
+%end
